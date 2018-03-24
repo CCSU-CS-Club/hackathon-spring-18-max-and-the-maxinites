@@ -1,12 +1,13 @@
 // GoogleMapsAPI Key: AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI
 
 var theMap;
-var map = {
+var mapAction = {
     initMap: function() {
       map = new google.maps.Map(document.getElementById('theMap'), {
         center: {lat: 41.69, lng: -72.76},
         zoom: 8
       });
+      console.log("MAP LOADED");
     },
     
     
@@ -18,14 +19,14 @@ var map = {
     request: function(url){ 
         var req = new XMLHttpRequest();
         req.open('GET', url, false);
-        req.setRequestHeader("token", "mHTrdLZOjDogXdFffgTmOKAkkEwnodin");
+        //req.setRequestHeader("token", "mHTrdLZOjDogXdFffgTmOKAkkEwnodin");
         req.send(null);   
         return req.responseText;        
     },
     
-    test: function(){
-        var url = getInputText();
-        console.log(requestRawTextWithToken(url));
+    test: function() {
+        console.log("test function called");
+        data.getNationalAlerts();
     },
     
     /**

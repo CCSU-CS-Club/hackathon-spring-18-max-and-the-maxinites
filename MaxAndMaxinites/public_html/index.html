@@ -17,18 +17,17 @@
         padding: 0;
       }
     </style>
+    <script src="GoogleMapsInterface.js"></script>
+    <script src="DataInterface.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI&callback=mapAction.initMap" async defer></script>
   </head>
   <body>
     <div id="theMap"></div>
     <form name="input_form">
-     
-            
-                <input name="text_input" type="text"/>
-                <input type="button" onclick="map.test"/>
-     
+        <input name="text_input" type="text">
+        <input type="button" value="for testing" onClick="mapAction.test()">
+        
     </form>
-    <script src="GoogleMapsInterface.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI&callback=map.initMap"
-    async defer></script>
+
   </body>
 </html>
