@@ -7,7 +7,7 @@
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
+      #theMap {
         height: 100%;
       }
       /* Optional: Makes the sample page fill the window. */
@@ -19,16 +19,16 @@
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="theMap"></div>
     <form name="input_form">
-        <table>
+     
             
                 <input name="text_input" type="text"/>
-            
-        </table>
+                <input type="button" onclick="map.test"/>
+     
     </form>
     <script src="GoogleMapsInterface.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI&callback=map.initMap"
     async defer></script>
   </body>
 </html>

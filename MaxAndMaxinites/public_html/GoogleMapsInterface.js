@@ -1,12 +1,13 @@
 // GoogleMapsAPI Key: AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI
 
-var map;
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
+var theMap;
+var map = {
+    initMap: function() {
+      map = new google.maps.Map(document.getElementById('theMap'), {
         center: {lat: 41.69, lng: -72.76},
         zoom: 8
       });
-    };
+    },
     
     
     /**
@@ -14,12 +15,18 @@ var map;
      * @param {type} url
      * @returns {Array|Object}
      */
-    requestRawText : function(url){ 
+    request: function(url){ 
         var req = new XMLHttpRequest();
         req.open('GET', url, false);
+        req.setRequestHeader("token", "mHTrdLZOjDogXdFffgTmOKAkkEwnodin");
         req.send(null);   
         return req.responseText;        
-    };
+    },
+    
+    test: function(){
+        var url = getInputText();
+        console.log(requestRawTextWithToken(url));
+    },
     
     /**
      * Computes distance in miles between the lat, lng positions provided
@@ -34,9 +41,9 @@ var map;
         var dist = google.maps.geometry.spherical.computeDistanceBetween(pos1, pos2); //in meters
         dist = dist / 1609.34; //convert to miles
         return dist;       
-    };
+    },
             
-        /**
+    /**
      * Takes user address as a string, makes a call to google's geocoding service
      * returns the JSON object of the resulting call to google's geocoding service
      * which contains the latitude, longitude of the user address, among many 
@@ -47,11 +54,12 @@ var map;
     geocode: function(address){
         address = address.replace(" ", "+");
         var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
-            + address + '&components=state:CT&key=AIzaSyBezkqLyMpXAF9dBb4X5rZeQkyF8Y5_Te4';  
+            + address + '&key=AIzaSyBezkqLyMpXAF9dBb4X5rZeQkyF8Y5_Te4';  
         return JSON.parse(request(url));
-    };
+    },
             
     getTextInput: function(){
         var text = document.input_form.text.value;
         return text;
-    };
+    }
+};
