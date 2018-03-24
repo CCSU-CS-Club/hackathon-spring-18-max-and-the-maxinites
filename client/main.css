@@ -1,1 +1,38 @@
 /* CSS declarations go here */
+body {
+  margin: 0;
+}
+
+.menu {
+  display: inline-block;
+  background-color: #002266;
+  width: 80vw;
+  height: 100vh;
+  position: absolute;
+  color: white;
+}
+
+.menu-modal {
+  display: block;
+  background-color: rgba(0,0,0,0.5);
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.menu-hidden {
+  display: none;
+}
+
+.menu-toggle {
+  color: white;
+  padding-left: 10px;
+  padding-top: 7px;
+  font-size: 2em;
+}
+
+.top-bar {
+  width: 100vw;
+  height: 50px;
+  background-color: #002266;
+}
