@@ -1,17 +1,35 @@
 var data = {
-
+    
+    baseUrl: 'https://api.weather.gov/alerts/active', 
+    
     getNationalAlerts: function(){
-        var alerts = this.request("https://api.weather.gov/alerts/active");
+        var url = this.baseUrl;
         console.log("National Alerts:");
-        //alerts.replace("@", "");
-        console.log(JSON.parse(alerts));
+        var alerts = JSON.parse(this.requestText(url));
+        console.log(alerts);
         return alerts;
     },
     
-    request: function(url){ 
+    getSevereAlerts: function(){
+        var url = this.baseUrl += '?severity=severe';
+        console.log('Severe Alerts');
+        var alerts = JSON.parse(this.requestText(url));
+        console.log(alerts);
+        return alerts;
+    },
+
+    severeAlertsByState: function(state){
+        var url = this.baseUrl + '?state=' + state + '&severity=severe';
+        var alerts = JSON.parse(this.requestText(url));
+        return alerts;
+    },
+    
+    requestText: function(url){ 
         var req = new XMLHttpRequest();
         req.open('GET', url, false);
         req.send(null);   
         return req.responseText;        
     }
+    
+    
 };

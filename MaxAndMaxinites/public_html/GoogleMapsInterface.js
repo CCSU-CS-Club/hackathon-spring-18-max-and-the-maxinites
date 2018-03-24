@@ -1,3 +1,5 @@
+/* global data, google */
+
 // GoogleMapsAPI Key: AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI
 
 var theMap;
@@ -10,23 +12,14 @@ var mapAction = {
       console.log("MAP LOADED");
     },
     
-    
-    /**
-     * Returns raw text of the provided url
-     * @param {type} url
-     * @returns {Array|Object}
-     */
-    request: function(url){ 
-        var req = new XMLHttpRequest();
-        req.open('GET', url, false);
-        //req.setRequestHeader("token", "mHTrdLZOjDogXdFffgTmOKAkkEwnodin");
-        req.send(null);   
-        return req.responseText;        
-    },
+
+
     
     test: function() {
-        console.log("test function called");
-        data.getNationalAlerts();
+        var state = this.getTextInput();
+        var alerts = data.severeAlertsByState(state);
+        console.log(alerts);
+        
     },
     
     /**
@@ -60,7 +53,22 @@ var mapAction = {
     },
             
     getTextInput: function(){
-        var text = document.input_form.text.value;
+        var text = document.input_form.text_input.value;
         return text;
+    }, 
+        
+    drawPolygon: function(weatherFeature){
+        var pts = weatherFeature.geometry.coordinates;
+        var pgon = new google.maps.Polygon({
+          paths: pts,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        pgon.setMap(map);
+        return pgon;
     }
 };
+
