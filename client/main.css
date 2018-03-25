@@ -1,12 +1,15 @@
 /* CSS declarations go here */
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 .menu {
   display: inline-block;
   background-color: #002266;
   width: 80vw;
+  margin-left: 0;
+  -webkit-transition: margin-left 0.5s;
   height: 100vh;
   position: absolute;
   color: white;
@@ -17,6 +20,7 @@ body {
 .menu-modal {
   display: block;
   background-color: rgba(0,0,0,0.5);
+  -webkit-transition: background-color 0.25s;
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -24,7 +28,12 @@ body {
 }
 
 .menu-hidden {
-  display: none;
+  margin-left: -150vw;
+}
+
+.menu-modal-hidden {
+  margin-left: -150vw;
+  background-color: rgba(0,0,0,0);
 }
 
 .menu-toggle {
