@@ -29,9 +29,9 @@ class App extends React.Component{
 			</div>
 			<div className="top-bar">
 				<div className="menu-toggle" onClick={this.toggleMenu}><FontAwesomeIcon icon="bars"/></div>
-				<input class="location-entry" type="text" name="locationField" placeholder="Location"/>
+				<input className="location-entry" type="text" name="locationField" placeholder="Location"/>
 			</div>
-			<Map/>
+			<MapCont/>
 			</>
 		)
 	}
