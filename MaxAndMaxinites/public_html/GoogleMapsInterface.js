@@ -18,9 +18,20 @@ var mapAction = {
 
     
     test: function() {
+        this.getUserGeolocation();
+        /*
         var state = this.getTextInput();
         //this.drawAlertAreaByState("moderate", state);
-        this.drawAlertAreaByState("severe", state);
+        //this.drawAlertAreaByState("severe", state);
+        var alerts = data.severeAlertsByState("severe", "");
+        console.log(alerts.features);
+        var features = alerts.features;
+        var types = [];
+        for (var i = 0; i < features.length; i++){
+            types.push(features[i].properties.event);
+        }
+        console.log(JSON.stringify(types));
+        */
     },
     
     /**
@@ -239,6 +250,28 @@ var mapAction = {
         //console.log(JSON.stringify(ptArr));
         return ptArr;
     },
+    
+    getUserGeolocation: function(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                
+                console.log("USER LOCATION: ");
+                console.log("lat: " + pos.lat);
+                console.log("lng: " + pos.lng);
+                return pos;
+            }, function(){
+                console.log("GEOLOCATION FAILED");
+                return null;
+            });
+        }else{
+            console.log("GEOLOCATION NOT AVAILABLE");
+            return null;
+        }
+    }
     
   
 };
