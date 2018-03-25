@@ -2,8 +2,7 @@ import React from 'react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import fontAwesome from '@fortawesome/fontawesome'
 import {faBars} from '@fortawesome/fontawesome-free-solid'
-import Map from './Map'
-import googleMaps from '@google/maps'
+import MapCont from './Map'
 
 fontAwesome.library.add(faBars)
 
@@ -12,9 +11,6 @@ class App extends React.Component{
 		super(props)
 		this.toggleMenu = this.toggleMenu.bind(this)
 		this.state = {
-			googleMapsClient: googleMaps.createClient({
-				key: 'AIzaSyDK8uA17TfC1LEJ3OIoAYo2CP9VsJXBkSI'
-			}),
 			hideMenu: true
 		}
 	}
