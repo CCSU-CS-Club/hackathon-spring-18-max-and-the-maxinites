@@ -15,8 +15,10 @@ class App extends React.Component{
 	constructor(props){
 		super(props)
 		this.toggleMenu = this.toggleMenu.bind(this)
+		this.onTextInput = this.onTextInput.bind(this)
 		this.state = {
-			hideMenu: true
+			hideMenu: true,
+			currentLocation: ''
 		}
 	}
 
@@ -35,8 +37,9 @@ class App extends React.Component{
 			</div>
 			<div className="top-bar">
 				<div className="menu-toggle"><FontAwesomeIcon icon="bars"/></div>
-				<input className="location-entry" type="text" name="locationField" placeholder="Location"/>
+
 			</div>
+			<Route path="/" exact component={MapCont}/>
 			<Route path="/map" component={MapCont}/>
 			<Route path="/list" component={List}/>
 				</div>
@@ -46,6 +49,11 @@ class App extends React.Component{
 
 	toggleMenu(){
 		this.setState({hideMenu: !this.state.hideMenu});
+	}
+
+	onTextInput(e){
+		console.log(e)
+		this.setState({currentLocation: e.target.value})
 	}
 }
 
