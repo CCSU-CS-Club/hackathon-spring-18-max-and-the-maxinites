@@ -166,9 +166,8 @@ var mapAction = {
             //console.log(geocode);
             if (geocode.status === "OK"){
                 console.log("GEOCODE RESULTS GOOD");
-                var vport =  geocode.results[0].geometry.viewport;
-                var points = [vport.northeast, vport.southwest];
-                var shapepts = this.getRectangle(points);
+                var centerpt = geocode.results[0].geometry.location;
+                var shapepts = this.getRectangle(centerpt);
                 console.log(shapepts);
                 weatherFeature.points = shapepts;
                 this.drawPolygon(weatherFeature);
@@ -212,11 +211,13 @@ var mapAction = {
         */
     },
     
-    getRectangle: function(corners){
-        var x0 = corners[0].lng;
-        var y0 = corners[0].lat;
-        var x1 = corners[1].lng;
-        var y1 = corners[1].lat;
+    getRectangle: function(center){
+        var latDelta = 0.214;
+        var lngDelta = 0.364;
+        var x0 = center.lng + lngDelta;
+        var y0 = center.lat - latDelta;
+        var x1 = center.lng - lngDelta;
+        var y1 = center.lat + latDelta;
         var ptArr = [{lat: y0, lng: x0}, {lat: y0, lng: x1}, {lat: y1, lng: x1}, {lat: y1, lng: x0}];
         console.log("RECTANGLE PTS");
         console.log(ptArr);
