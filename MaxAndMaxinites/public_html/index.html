@@ -16,6 +16,26 @@
         margin: 0;
         padding: 0;
       }
+    #directions-panel {
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+      padding-left: 0px;
+    }
+    #directions-panel select, #directions-panel input {
+      font-size: 15px;
+    }
+    #directions-panel select {
+      width: 380px;
+    }
+    #directions-panel i {
+      font-size: 12px;
+    }
+    #directions-panel {
+      height: 600px;
+      float: left;
+      width: 380px;
+      overflow: auto;
+    }
     </style>
     <script src="DataInterface.js"></script>
     <script src="GoogleMapsInterface.js"></script>
@@ -29,6 +49,7 @@
         <input type="button" value="for testing" onClick="mapAction.test()">
         <input type="button" value="clear" onClick="mapAction.clearOnce()">        
     </form>
+    <div id="directions-panel"></div>
 
   </body>
 </html>

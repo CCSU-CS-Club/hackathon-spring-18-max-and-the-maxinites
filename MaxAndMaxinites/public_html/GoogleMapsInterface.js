@@ -6,7 +6,7 @@ var theMap;
 var mapAction = {
     
     mapVisibles: [],
-    
+    userPosition: null,
     
     initMap: function() {
       theMap = new google.maps.Map(document.getElementById('theMap'), {
@@ -18,11 +18,14 @@ var mapAction = {
 
     
     test: function() {
-        this.getUserGeolocation();
-        /*
-        var state = this.getTextInput();
+        directions.request();
+        //var pos = this.getUserGeolocation();
+        //console.log(pos);
+        //var alerts = data.getCloseAlerts(pos, "");
+        //var state = this.getTextInput();
         //this.drawAlertAreaByState("moderate", state);
-        //this.drawAlertAreaByState("severe", state);
+        this.drawAlertAreaByState("severe", "");
+        /*
         var alerts = data.severeAlertsByState("severe", "");
         console.log(alerts.features);
         var features = alerts.features;
@@ -32,6 +35,7 @@ var mapAction = {
         }
         console.log(JSON.stringify(types));
         */
+        
     },
     
     /**
@@ -96,6 +100,7 @@ var mapAction = {
               visible: false,
               position: pts[0]
           }),
+          
           center: new google.maps.LatLng(pts[0]),
           paths: pts,
           strokeColor: '#FF0000',
@@ -105,6 +110,7 @@ var mapAction = {
           fillOpacity: 0.35,
           map: theMap,
           clickable: true,
+          areaDesc: properties.areaDesc,
           description: properties.description,
           ends: properties.ends,
           eventType: properties.event,
@@ -112,15 +118,17 @@ var mapAction = {
         });
         pgon.addListener('click', function(){
            var infoString ="";
+           if (pgon.areaDesc != null)
+               infoString += "<p><b>Area: </b>" + pgon.areaDesc + "</p>";
            if (pgon.eventType != null)
-               infoString += "<p><b>Alert Type:</b>" + pgon.eventType + "</p>";
+               infoString += "<p><b>Alert Type: </b>" + pgon.eventType + "</p>";
            if (pgon.instructions != null)
-               infoString += "<p><b>Instructions:</b>" + pgon.instructions + "</p>";
+               infoString += "<p><b>Instructions: </b>" + pgon.instructions + "</p>";
            if (pgon.description != null)
-               infoString += "<p><b>Description:</b>" + pgon.description + "</p>";
+               infoString += "<p><b>Description: </b>" + pgon.description + "</p>";
            if (pgon.ends != null){
                var endStr = pgon.ends.split("T");
-               infoString = "<p><b>Alert Ends:</b> \nDate:" + endStr[0] + "\nTime: " + endStr[1]  + "</p>";
+               infoString = "<p><b>Alert Ends:</b> \nDate: " + endStr[0] + "\nTime:  " + endStr[1]  + "</p>";
             }
            var infowindow = new google.maps.InfoWindow();
            infowindow.setContent(infoString);
@@ -254,15 +262,15 @@ var mapAction = {
     getUserGeolocation: function(){
         if (navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
+                this.userPos = {
                   lat: position.coords.latitude,
                   lng: position.coords.longitude
                 };
                 
                 console.log("USER LOCATION: ");
-                console.log("lat: " + pos.lat);
-                console.log("lng: " + pos.lng);
-                return pos;
+                console.log("lat: " + this.userPos.lat);
+                console.log("lng: " + this.userPos.lng);
+                return this.userPos;
             }, function(){
                 console.log("GEOLOCATION FAILED");
                 return null;
@@ -271,8 +279,56 @@ var mapAction = {
             console.log("GEOLOCATION NOT AVAILABLE");
             return null;
         }
-    }
-    
-  
+    }  
 };
 
+var directions = {
+    service: null,
+    renderer: null,
+    rendererOptions: null,
+    isInit: false,
+    start: {"lat" : 29.687908, "lng" : -91.1855975},//{"lat" : 30.2395901, "lng" : -91.75388169999999}, //"St. Martin Louisianna",
+    end: {"lat" : 30.2240897, "lng" : -92.0198427},//"Lafayette Louisianna",
+    
+    init: function(){
+        this.isInit = true;
+        this.service = new google.maps.DirectionsService();
+        this.rendererOptions = {
+            map: theMap,
+            panel: document.getElementById("directions-panel"),
+            hideRouteList: false,
+            preserveViewPort: false
+        };
+        this.renderer = new google.maps.DirectionsRenderer();
+        this.renderer.setOptions(directions.rendererOptions);
+    },
+    
+    request: function(){
+        
+            if (!directions.isInit){
+                this.init();
+            }else{
+                this.clear();
+            }            
+            this.renderer.setOptions(this.rendererOptions);
+
+            this.service.route({
+                travelMode: "DRIVING",
+                origin: this.start,
+                destination: this.end
+            }, this.display); 
+            //smap.add([directions]);
+                
+    },
+    display: function(response, status){
+        if (status === 'OK')
+            directions.renderer.setDirections(response);
+        else
+            window.alert('Directions request failed due to ' + status);        
+    },
+    
+    clear: function(){
+        this.renderer.setMap(null);
+        this.renderer.setPanel(null);
+    }
+};
