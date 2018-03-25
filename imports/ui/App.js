@@ -37,8 +37,9 @@ class App extends React.Component{
 			</div>
 			<div className="top-bar">
 				<div className="menu-toggle"><FontAwesomeIcon icon="bars"/></div>
-				
+
 			</div>
+			<Route path="/" exact component={MapCont}/>
 			<Route path="/map" component={MapCont}/>
 			<Route path="/list" component={List}/>
 				</div>
