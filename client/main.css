@@ -48,31 +48,14 @@ body {
   width: 100vw;
   height: 50px;
   background-color: #002266;
+  display: block;
 }
 
 ::placeholder {
   color: #00aaff;
   opacity: 0.8;
 }
-.submit {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin-top: 10px;
-  width: 15vw;
-  height: 5vh;
-  font-size: 2em;
-  border: 2px solid #00aaff;
-  border-radius: 5px;
-  background-color: rgba(0,170,255,.2);
-  color: #00aaff;
-}
-.submit:hover {
-  background-color: rgba(0,170,255,.4);
-}
-.submit:active {
-  background-color: rgba(0,170,255,.6);
-}
+
 .location-entry {
   width: 75%;
   height: 10px;
@@ -84,4 +67,21 @@ body {
   border-radius: 5px;
   color: #44bbff;
   float: right;
+}
+
+.menu-title {
+  margin-top:-25px;
+  width: 80vw;
+  height: 75px;
+  font-size: 1.5em;
+}
+
+.menu-options {
+  width: 80vw;
+  height: 60px;
+}
+
+.menu-list {
+  list-style-type: none;
+  font-size: 2em;
 }

@@ -23,7 +23,13 @@ class App extends React.Component{
 		return(
 			<>
 			<div className={'menu-modal' + (this.state.hideMenu ? ' menu-modal-hidden' : '') } onClick={this.toggleMenu}>
-				<div className={'menu' + (this.state.hideMenu ? ' menu-hidden' : '') }>{"I'm a menu"}</div>
+				<div className={'menu' + (this.state.hideMenu ? ' menu-hidden' : '') }>
+					<ul className={'menu-list'}>
+						<li className={'menu-title'}>RunAway</li>
+						<li className={'menu-options'}>Option 1</li>
+						<li className={'menu-options'}>Option 2</li>
+					</ul>
+				</div>
 			</div>
 			<div className="top-bar">
 				<div className="menu-toggle" onClick={this.toggleMenu}><FontAwesomeIcon icon="bars"/></div>
