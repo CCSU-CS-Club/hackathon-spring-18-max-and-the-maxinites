@@ -47,15 +47,15 @@ export class MapCont extends  React.Component{
 				onDragend={this.onDragEnd}
 			>
 				<Marker name={"Current Location"} position={this.state.currentLoc} onClick={this.onMarkerClick} visible={true}/>
-				{this.state.polygons.map(el=>(<Marker ref={(marker)=>{this.state.markers[el.name]=marker}} name={el.name}
+				{this.state.polygons.map(el=>(<Marker ref={(marker)=>{this.state.markers[el.name]=marker}} title={el.name}
 				position={el.position} visible={false} icon={{url:"/transparent.png"}}/>))}
 				{this.state.polygons.map(el=>(<Polygon name={el.name} onClick={this.onPolygonClick}
 					paths={el.paths} strokeColor={el.strokeColor} strokeOpacity={el.strokeOpacity}
 					strokeWeight={el.strokeWeight} fillColor={el.fillColor} fillOpacity={el.fillOpacity} marker={this.state.markers[el.name]}/>))}
 				<InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
-					<div>
-						{this.state.infoText}
-					</div>
+					<div
+						dangerouslySetInnerHTML={{__html: this.state.infoText}}
+					/>
 				</InfoWindow>
 			</Map>
 		)
@@ -77,9 +77,13 @@ export class MapCont extends  React.Component{
 
 	onPolygonClick(props, poly, e){
 		var marker = props.marker.marker
-		//console.log(props)
+		console.log(props.marker)
+		var text = marker.title
+
+
+
 		this.setState({activeMarker: marker})
-		this.setState({infoText: marker.name})
+		this.setState({infoText: text})
 		this.setState({showingInfoWindow: true})
 	}
 
@@ -98,7 +102,7 @@ export class MapCont extends  React.Component{
 			lngSum += point.lng;
 		})
 		position = {lat: latSum/points.length, lng: lngSum/points.length}
-		polygons.push({name: polygons.length, paths: points, strokeColor: color, strokeOpacity: 0.8, strokeWeight: 2, fillColor: color, fillOpacity: 0.35, position: position})
+		polygons.push({name: name, paths: points, strokeColor: color, strokeOpacity: 0.8, strokeWeight: 2, fillColor: color, fillOpacity: 0.35, position: position})
 		this.setState({polygons: polygons})
 	}
 
@@ -129,14 +133,18 @@ export class MapCont extends  React.Component{
 			var properties = weatherFeature.properties;
 			//console.log(JSON.stringify(pts[0]));
 			var name = ""
-			function concat(opt, name) {
-				if (opt != undefined) {
-					return name + opt
-				} else {
-					return name
-				}
+			if (properties.areaDesc != undefined) {
+				name += "<p><b>Area: </b>" + properties.areaDesc + "</p><br/>"
 			}
-			name = concat(properties.areaDesc, concat(properties.description, concat(properties.event, concat(properties.instruction, name))))
+			if (properties.eventType != undefined) {
+				name += "<p><b>Alert Type: </b>" + properties.eventType + "</p><br/>"
+			}
+			if (properties.description != undefined) {
+				name += "<p><b>Description: </b>" + properties.description + "</p><br/>"
+			}
+			if (properties.instruction != undefined) {
+				name += "<p><b>Instructions: </b>" + properties.instruction + "</p><br/>"
+			}
 			this.addPolygon(name,pts,"#FF0000")
 	}
 
