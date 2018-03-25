@@ -19,7 +19,7 @@ var mapAction = {
     
     test: function() {
         var state = this.getTextInput();
-        this.drawAlertAreaByState("moderate", state);
+        //this.drawAlertAreaByState("moderate", state);
         this.drawAlertAreaByState("severe", state);
     },
     
@@ -49,8 +49,11 @@ var mapAction = {
     geocode: function(address){
         address = address.replace(" ", "+");
         var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
-            + address + '&key=AIzaSyBezkqLyMpXAF9dBb4X5rZeQkyF8Y5_Te4';  
-        return JSON.parse(data.requestText(url));  
+            + address + '&key=AIzaSyBezkqLyMpXAF9dBb4X5rZeQkyF8Y5_Te4'; 
+        console.log("GEOCODING: " + address);
+        var geocode = JSON.parse(data.requestText(url));
+        console.log(geocode);
+        return geocode; 
     },
             
     getTextInput: function(){
@@ -69,7 +72,11 @@ var mapAction = {
     drawPolygon: function(weatherFeature){
         console.log("weather feature:");
         console.log(weatherFeature);
-        var pts = this.rawToLatLngArr(weatherFeature.geometry.coordinates[0]);
+        var pts;
+        if (weatherFeature.geometry != null)
+            pts = this.rawToLatLngArr(weatherFeature.geometry.coordinates);
+        else
+            pts = weatherFeature.points;
         var properties = weatherFeature.properties;
         console.log(JSON.stringify(pts[0]));
         var pgon = new google.maps.Polygon({
@@ -128,10 +135,12 @@ var mapAction = {
             //console.log("in loop: " + i);
             feature = alerts.features[i];
             if (feature.geometry !== null){
-                polygons.push(this.drawPolygon(feature));
+                feature.points = null;
+                //this.drawPolygon(feature);
             }else{
-                console.log(feature);
-                console.log("GEOMETRY IS NULL!!!!!!!!!!!!!!!!!!!!");
+                this.addPolygonForNullPoints(feature);
+                //console.log(feature);
+                //console.log("GEOMETRY IS NULL!!!!!!!!!!!!!!!!!!!!");
             }
         }
         //this.addToMap(polygons);
@@ -143,10 +152,56 @@ var mapAction = {
      * @param {type} weatherFeature
      * @returns {undefined}
      */
-    addMarkersForAlert: function(weatherFeature){
-        var areaDescription = weatherFeature.properties.areaDesc;
+    addPolygonForNullPoints: function(weatherFeature){
+        console.log("CALLED addPolygonNullPoints");
+        var areaDescriptions = weatherFeature.properties.areaDesc.split(";");
+        var state = weatherFeature.properties.geocode.UGC[0].substring(0, 2);
+        var geocode, searchAddress;
+        
+        for (var i = 0; i < areaDescriptions.length; i++){
+            console.log("IN THE LOOP");
+            searchAddress = areaDescriptions[i] + " " + state;
+            console.log("the address: " + searchAddress);
+            geocode = this.geocode(searchAddress);
+            //console.log(geocode);
+            if (geocode.status === "OK"){
+                console.log("GEOCODE RESULTS GOOD");
+                var vport =  geocode.results[0].geometry.viewport;
+                var points = [vport.northeast, vport.southwest];
+                var shapepts = this.getRectangle(points);
+                console.log(shapepts);
+                weatherFeature.points = shapepts;
+                this.drawPolygon(weatherFeature);
+            }else{
+                console.log("GEOCODE STATUS IS NOT OK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }            
+        }
+        /*
+        
+        
+        geocodes.push({geo: this.geocode(areaDescriptions[i] + " " + state)});
         console.log("GEOCODED $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        var geocoded = this.geocode(areaDescription);
+        console.log(geocodes);
+        var points = [];
+        for (i = 0; i < geocodes.length; i++){
+            if (geocodes[i].geo.status === "OK"){
+                console.log(geocodes[i].geo.results[0].geometry)
+                const { viewport, bounds, location} = geocodes[i].geo.results[0].geometry;
+                if(bounds){
+                    const {northeast, southwest} = bounds                
+                    points.push(northeast);
+                    points.push(southwest);
+                }    
+                //else
+                   //points.push(location)
+                console.log(viewport);
+            }
+        
+        },
+        weatherFeature.points = points;
+        console.log("POINTS: " + JSON.stringify(points));
+        this.drawPolygon(weatherFeature);
+        
         console.log(geocoded);
         var latLng = geocoded.results[0].geometry.location;
         var marker = new google.maps.Marker({
@@ -154,6 +209,18 @@ var mapAction = {
             map: theMap
         });
         return marker;
+        */
+    },
+    
+    getRectangle: function(corners){
+        var x0 = corners[0].lng;
+        var y0 = corners[0].lat;
+        var x1 = corners[1].lng;
+        var y1 = corners[1].lat;
+        var ptArr = [{lat: y0, lng: x0}, {lat: y0, lng: x1}, {lat: y1, lng: x1}, {lat: y1, lng: x0}];
+        console.log("RECTANGLE PTS");
+        console.log(ptArr);
+        return ptArr;
     },
     
 
