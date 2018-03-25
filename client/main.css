@@ -11,6 +11,7 @@ body {
   position: absolute;
   color: white;
   box-shadow: 5px 0 10px rgba(0,0,0,0.5);
+  z-index: 11;
 }
 
 .menu-modal {
@@ -19,6 +20,7 @@ body {
   width: 100vw;
   height: 100vh;
   position: absolute;
+  z-index: 10;
 }
 
 .menu-hidden {
