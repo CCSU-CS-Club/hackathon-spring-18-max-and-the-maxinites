@@ -25,6 +25,7 @@ class App extends React.Component{
 			<div className={'menu-modal' + (this.state.hideMenu ? ' menu-hidden' : '') } onClick={this.toggleMenu}><div className="menu">{"I'm a menu"}</div></div>
 			<div className="top-bar">
 				<div className="menu-toggle" onClick={this.toggleMenu}><FontAwesomeIcon icon="bars"/></div>
+				<input class="location-entry" type="text" name="locationField" placeholder="Location"/>
 			</div>
 			<Map/>
 			</>
