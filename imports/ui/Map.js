@@ -71,8 +71,8 @@ export class MapCont extends  React.Component{
 	}
 
 	onMarkerClick(props, marker, e){
-		this.setState({activeMarker: marker})
-		this.setState({showingInfoWindow: true})
+		//this.setState({activeMarker: marker})
+		//this.setState({showingInfoWindow: true})
 	}
 
 	onPolygonClick(props, poly, e){
