@@ -5,7 +5,7 @@ var data = {
     getNationalAlerts: function(){
         var url = this.baseUrl;
         console.log("National Alerts:");
-        var alerts = JSON.parse(this.requestText(url));
+        var alerts = JSON.parse(this.requestText("testfiles/TXAlerts.json"));
         console.log(alerts);
         return alerts;
     },
@@ -18,8 +18,8 @@ var data = {
         return alerts;
     },
 
-    severeAlertsByState: function(state){
-        var url = this.baseUrl + '?state=' + state + '&severity=severe';
+    severeAlertsByState: function(severity, state){
+        var url = this.baseUrl + '?state=' + state + '&Severity=' + severity;
         var alerts = JSON.parse(this.requestText(url));
         return alerts;
     },

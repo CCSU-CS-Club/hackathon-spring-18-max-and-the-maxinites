@@ -5,8 +5,8 @@
 var theMap;
 var mapAction = {
     initMap: function() {
-      map = new google.maps.Map(document.getElementById('theMap'), {
-        center: {lat: 41.69, lng: -72.76},
+      theMap = new google.maps.Map(document.getElementById('theMap'), {
+        center: {lat:32.94, lng: -93},
         zoom: 8
       });
       console.log("MAP LOADED");
@@ -17,9 +17,19 @@ var mapAction = {
     
     test: function() {
         var state = this.getTextInput();
-        var alerts = data.severeAlertsByState(state);
+        //var alerts = JSON.parse(data.requestText("testData/TXAlerts"));
+        var feature, points;
+        var alerts = data.severeAlertsByState("severe", state);
         console.log(alerts);
-        
+        for (var i = 0; i < alerts.features.length; i++){
+            //console.log("in loop: " + i);
+            feature = alerts.features[i];
+            if (feature.geometry !== null){
+                this.drawPolygon(feature);
+            }else{
+                console.log("GEOMETRY IS NULL!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
     },
     
     /**
@@ -49,7 +59,7 @@ var mapAction = {
         address = address.replace(" ", "+");
         var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' 
             + address + '&key=AIzaSyBezkqLyMpXAF9dBb4X5rZeQkyF8Y5_Te4';  
-        return JSON.parse(request(url));
+        return JSON.parse(request(url));  
     },
             
     getTextInput: function(){
@@ -58,7 +68,10 @@ var mapAction = {
     }, 
         
     drawPolygon: function(weatherFeature){
-        var pts = weatherFeature.geometry.coordinates;
+        console.log("weather feature:");
+        console.log(weatherFeature);
+        var pts = this.rawToLatLngArr(weatherFeature.geometry.coordinates[0]);
+
         var pgon = new google.maps.Polygon({
           paths: pts,
           strokeColor: '#FF0000',
@@ -67,8 +80,22 @@ var mapAction = {
           fillColor: '#FF0000',
           fillOpacity: 0.35
         });
-        pgon.setMap(map);
+        pgon.setMap(theMap);
         return pgon;
+    },
+    
+    rawToLatLngArr: function(arr){
+        //console.log(arr);
+        var ptArr = [];
+        var point;
+        for (var i = arr.length-1; i >= 0; i--){
+            point = new google.maps.LatLng(arr[i][1], arr[i][0]);
+            console.log(JSON.stringify(point));
+            ptArr.push(point);
+        }
+        console.log("LatLng array as string:");
+        console.log(JSON.stringify(ptArr));
+        return ptArr;
     }
 };
 
