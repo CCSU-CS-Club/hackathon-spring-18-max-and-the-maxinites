@@ -14,9 +14,7 @@ var mapAction = {
         zoom: 8
       });
       console.log("MAP LOADED");
-    },
-    
-    
+    },    
 
     
     test: function() {
@@ -60,6 +58,14 @@ var mapAction = {
         return text;
     }, 
         
+    /**
+     * Draws polygon associated with weather event
+     * extracts the lat, lng array
+     * draws polygon on map
+     * adds listener to display storm info on click
+     * @param {type} weatherFeature: single element from raw storm data array
+     * @returns {mapAction.drawPolygon.pgon|google.maps.Polygon}
+     */
     drawPolygon: function(weatherFeature){
         console.log("weather feature:");
         console.log(weatherFeature);
@@ -89,14 +95,14 @@ var mapAction = {
         pgon.addListener('click', function(){
            var infoString ="";
            if (pgon.eventType != null)
-               infoString += "<p>Alert Type: " + pgon.eventType + "<\p>";
+               infoString += "<p><b>Alert Type:</b>" + pgon.eventType + "</p>";
            if (pgon.instructions != null)
-               infoString += "<p>Instructions: " + pgon.instructions + "<\p>";
+               infoString += "<p><b>Instructions:</b>" + pgon.instructions + "</p>";
            if (pgon.description != null)
-               infoString += "<p>Description: " + pgon.description + "<\p>";
+               infoString += "<p><b>Description:</b>" + pgon.description + "</p>";
            if (pgon.ends != null){
                var endStr = pgon.ends.split("T");
-               infoString = "<p>Alert Ends: \nDate:" + endStr[0] + "\nTime: " + endStr[1]  + "<\p>";
+               infoString = "<p><b>Alert Ends:</b> \nDate:" + endStr[0] + "\nTime: " + endStr[1]  + "</p>";
             }
            var infowindow = new google.maps.InfoWindow();
            infowindow.setContent(infoString);
@@ -105,6 +111,12 @@ var mapAction = {
         return pgon;
     },
     
+    /**
+     * 
+     * @param {type} severity
+     * @param {type} state
+     * @returns {undefined}\
+     */
     drawAlertAreaByState(severity, state){
         var state = this.getTextInput();
         //var alerts = JSON.parse(data.requestText("testData/TXAlerts"));
@@ -160,16 +172,6 @@ var mapAction = {
         return ptArr;
     },
     
-    /**
-     * removes objects visible on the map as in a queue FIFO
-     * @returns {undefined}
-     */
-    clearOnce: function(){
-        var toBeRemoved = this.mapVisibles[0];
-        for (var i = 0; i < toBeRemoved.length; i++){
-            toBeRemoved[i].clear();
-        }
-        this.mapVisibles.shift();
-    }
+  
 };
 
