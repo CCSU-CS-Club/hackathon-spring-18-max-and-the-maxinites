@@ -1,6 +1,5 @@
 import React from 'react'
 import {Map, Polygon, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
-import {Location} from './Location'
 
 export class MapCont extends  React.Component{
 
@@ -24,10 +23,10 @@ export class MapCont extends  React.Component{
 		}
 		//this.addMarker('center',this.state.center.lat,this.state.center.lng, true)
 		this.addPolygon('javascriptIsMean', [
-			{lat: this.state.center.lat + 0.1, lng: this.state.center.lng + 0.1},
-			{lat: this.state.center.lat + 0.1, lng: this.state.center.lng - 0.1},
-			{lat: this.state.center.lat - 0.1, lng: this.state.center.lng - 0.1},
-			{lat: this.state.center.lat - 0.1, lng: this.state.center.lng + 0.1}
+			{lat: this.state.center.lat + 1.1, lng: this.state.center.lng + 1.1},
+			{lat: this.state.center.lat + 1.1, lng: this.state.center.lng + 0.9},
+			{lat: this.state.center.lat + 0.9, lng: this.state.center.lng + 0.9},
+			{lat: this.state.center.lat + 0.9, lng: this.state.center.lng + 1.1}
 		], "#FF0000")
 	}
 
@@ -41,11 +40,12 @@ export class MapCont extends  React.Component{
 				onClick={this.onMapClick}
 				onDragend={this.onDragEnd}
 			>
-				<Marker name={"Current Location"} position={this.state.center} visible={false}/>
-				{this.state.polygons.map(el=>(<Location name={el.name} onClick={this.onPolygonClick}
+				<Marker name={"Current Location"} position={this.state.center} onClick={this.onMarkerClick} visible={true}/>
+				{this.state.polygons.map(el=>(<Marker ref={(marker)=>{this.state.markers[el.name]=marker}} name={el.name}
+				position={el.position} visible={false} icon={{url:"/transparent.png"}}/>))}
+				{this.state.polygons.map(el=>(<Polygon name={el.name} onClick={this.onPolygonClick}
 					paths={el.paths} strokeColor={el.strokeColor} strokeOpacity={el.strokeOpacity}
-					strokeWeight={el.strokeWeight} fillColor={el.fillColor} fillOpacity={el.fillOpacity} text="hello"/>))}
-
+					strokeWeight={el.strokeWeight} fillColor={el.fillColor} fillOpacity={el.fillOpacity} marker={this.state.markers[el.name]}/>))}
 				<InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
 					<div>
 						{"Put text in here."}
@@ -64,12 +64,14 @@ export class MapCont extends  React.Component{
 		this.setState({showingInfoWindow: false})
 	}
 
-	onMarkerClick(props,marker,e){
+	onMarkerClick(props, marker, e){
 		this.setState({activeMarker: marker})
 		this.setState({showingInfoWindow: true})
 	}
 
-	onPolygonClick(marker){
+	onPolygonClick(props, poly, e){
+		var marker = props.marker.marker
+		console.log(props)
 		this.setState({activeMarker: marker})
 		this.setState({showingInfoWindow: true})
 	}
@@ -89,7 +91,7 @@ export class MapCont extends  React.Component{
 			lngSum += point.lng;
 		})
 		position = {lat: latSum/points.length, lng: lngSum/points.length}
-		polygons.push({name: polygons.length, paths: points, strokeColor: color, strokeOpacity: 0.8, strokeWeight: 2, fillColor: color, fillOpacity: 0.35, marker: {map: undefined, name: name, onClick: this.onMarkerClick, position: position, visible: true}})
+		polygons.push({name: polygons.length, paths: points, strokeColor: color, strokeOpacity: 0.8, strokeWeight: 2, fillColor: color, fillOpacity: 0.35, position: position})
 		this.setState({polygons: polygons})
 	}
 }
