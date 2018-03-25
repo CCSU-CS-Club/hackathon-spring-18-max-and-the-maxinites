@@ -17,19 +17,8 @@ var mapAction = {
     
     test: function() {
         var state = this.getTextInput();
-        //var alerts = JSON.parse(data.requestText("testData/TXAlerts"));
-        var feature, points;
-        var alerts = data.severeAlertsByState("severe", state);
-        console.log(alerts);
-        for (var i = 0; i < alerts.features.length; i++){
-            //console.log("in loop: " + i);
-            feature = alerts.features[i];
-            if (feature.geometry !== null){
-                this.drawPolygon(feature);
-            }else{
-                console.log("GEOMETRY IS NULL!!!!!!!!!!!!!!!!!!!!");
-            }
-        }
+        this.drawAlertAreaByState("moderate", state);
+        this.drawAlertAreaByState("severe", state);
     },
     
     /**
@@ -82,6 +71,23 @@ var mapAction = {
         });
         pgon.setMap(theMap);
         return pgon;
+    },
+    
+    drawAlertAreaByState(severity, state){
+        var state = this.getTextInput();
+        //var alerts = JSON.parse(data.requestText("testData/TXAlerts"));
+        var feature, points;
+        var alerts = data.severeAlertsByState("severe", state);
+        console.log(alerts);
+        for (var i = 0; i < alerts.features.length; i++){
+            //console.log("in loop: " + i);
+            feature = alerts.features[i];
+            if (feature.geometry !== null){
+                this.drawPolygon(feature);
+            }else{
+                console.log("GEOMETRY IS NULL!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
     },
     
     rawToLatLngArr: function(arr){
