@@ -73,8 +73,8 @@ var mapAction = {
         console.log("weather feature:");
         console.log(weatherFeature);
         var pts;
-        if (weatherFeature.geometry != null)
-            pts = this.rawToLatLngArr(weatherFeature.geometry.coordinates);
+        if (weatherFeature.points == null)
+            pts = this.rawToLatLngArr(weatherFeature.geometry.coordinates[0]);
         else
             pts = weatherFeature.points;
         var properties = weatherFeature.properties;
@@ -136,7 +136,7 @@ var mapAction = {
             feature = alerts.features[i];
             if (feature.geometry !== null){
                 feature.points = null;
-                //this.drawPolygon(feature);
+                this.drawPolygon(feature);
             }else{
                 this.addPolygonForNullPoints(feature);
                 //console.log(feature);
