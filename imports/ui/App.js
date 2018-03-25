@@ -6,6 +6,7 @@ import fontAwesome from '@fortawesome/fontawesome'
 import {faBars} from '@fortawesome/fontawesome-free-solid'
 
 import MapCont from './Map'
+import List from './List'
 import './App.css'
 
 fontAwesome.library.add(faBars)
@@ -22,8 +23,8 @@ class App extends React.Component{
 	render(){
 		return(
 			<Router>
-<div>
-			<div className={'menu-modal' + (this.state.hideMenu ? ' menu-modal-hidden' : '') } onClick={this.toggleMenu}>
+				<div>
+			<div className={'menu-modal' + (this.state.hideMenu ? ' menu-modal-hidden' : '')}  onClick={this.toggleMenu}>
 				<div className={'menu' + (this.state.hideMenu ? ' menu-hidden' : '') }>
 					<ul className={'menu-list'}>
 						<li className={'menu-title'}>RunAway</li>
@@ -33,12 +34,12 @@ class App extends React.Component{
 				</div>
 			</div>
 			<div className="top-bar">
-				<div className="menu-toggle" onClick={this.toggleMenu}><FontAwesomeIcon icon="bars"/></div>
+				<div className="menu-toggle"><FontAwesomeIcon icon="bars"/></div>
 				<input className="location-entry" type="text" name="locationField" placeholder="Location"/>
 			</div>
 			<Route path="/map" component={MapCont}/>
-			<Route path="/list" component={()=>(<h3>hello world</h3>)}/>
-</div>
+			<Route path="/list" component={List}/>
+				</div>
 			</Router>
 		)
 	}

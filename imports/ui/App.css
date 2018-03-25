@@ -15,12 +15,11 @@
 .menu-modal {
   display: block;
   background-color: rgba(0,0,0,0.5);
-
-  -webkit-transition: background-color 0.25s;
-  width: 100vw;
-  height: 100vh;
+  height: 54px;
+	width: 54px;
+	-webkit-transition: background-color 0.25s;
   position: absolute;
-  z-index: 10;
+	z-index: 10;
 }
 
 
